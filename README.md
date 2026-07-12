@@ -56,6 +56,61 @@ Then register the server with your MCP client. For Claude Code (`.mcp.json`):
 Ask your model something like *"search the docs for how authentication is handled"* and it will
 call `search_docs` and get back ranked excerpts with line numbers.
 
+## In practice
+
+This exists because I hit the problem from two directions at once: I wanted semantic search over a
+corpus of **structured design docs** *and* over a **long-form fiction manuscript**, and discovered
+that no single chunking strategy serves both. Splitting a novel on its headers gives you one
+useless mega-chunk per chapter. Sliding a fixed window over a reference doc slices sections in
+half and strands the heading from the thing it describes.
+
+Hence two strategies. The examples below are the three corpus shapes I actually run it against.
+
+### A structured knowledge base
+
+Design docs, runbooks, a team wiki. Sections are already self-contained ideas, and the header
+chain (`Runbook > Deploys > Rollback`) is a ready-made breadcrumb.
+
+```bash
+DOCSEARCH_CORPUS=~/notes/handbook
+DOCSEARCH_COLLECTION=handbook
+DOCSEARCH_CHUNK_MODE=header
+```
+
+### A long-form manuscript
+
+A novel, a screenplay, interview transcripts. Hundreds of pages, barely a header in sight — the
+kind of corpus where "which scene was it where they argued about the money?" is exactly the
+question you can't grep for.
+
+```bash
+DOCSEARCH_CORPUS=~/writing/manuscript
+DOCSEARCH_COLLECTION=manuscript
+DOCSEARCH_CHUNK_MODE=window
+DOCSEARCH_WINDOW=120     # prose needs more context per chunk than reference docs
+DOCSEARCH_OVERLAP=30     # a scene straddling a seam still lands whole in one window
+```
+
+### A mixed working directory
+
+Plans, notes and reference material side by side, with no consistent shape. Let `auto` decide per
+file, and use the `group` filter (the top-level folder) to scope a search to just `plans/` or just
+`reference/`.
+
+```bash
+DOCSEARCH_CORPUS=~/workspace
+DOCSEARCH_COLLECTION=workspace
+DOCSEARCH_CHUNK_MODE=auto
+DOCSEARCH_EXCLUDE=archive,drafts
+```
+
+```python
+search_docs("what did we decide about the migration?", group="plans")
+```
+
+One install, three corpora: give each its own `DOCSEARCH_COLLECTION` and they stay completely
+independent.
+
 ## Configuration
 
 All configuration is environment variables, so one install can serve many corpora.
