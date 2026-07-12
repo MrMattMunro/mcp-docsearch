@@ -1,0 +1,15 @@
+# Vector store — NEVER commit an index. It contains embedded copies of your
+# source documents, which may be private even when the code is not.
+.docsearch/
+.chromadb/
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/

@@ -1,0 +1,34 @@
+[project]
+name = "mcp-docsearch"
+version = "0.1.0"
+description = "Semantic search over any markdown corpus, exposed as an MCP server for Claude Code and other MCP clients."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Matthew Munro" }]
+keywords = ["mcp", "rag", "semantic-search", "chromadb", "claude", "embeddings"]
+
+dependencies = [
+    "mcp>=1.2.0",
+    "chromadb>=0.5.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+mcp-docsearch = "mcp_docsearch.server:main"
+mcp-docsearch-index = "mcp_docsearch.indexer:main"
+
+[project.urls]
+Homepage = "https://github.com/MrMattMunro/mcp-docsearch"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
