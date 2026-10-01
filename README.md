@@ -1,5 +1,9 @@
 # mcp-docsearch
 
+[![CI](https://github.com/MrMattMunro/mcp-docsearch/actions/workflows/ci.yml/badge.svg)](https://github.com/MrMattMunro/mcp-docsearch/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 Semantic search over any markdown corpus, exposed as an [MCP](https://modelcontextprotocol.io) server.
 
 Point it at a directory of markdown. It chunks the files, embeds them into a local
